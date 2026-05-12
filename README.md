@@ -4,36 +4,31 @@
 
 Lumina AI is an intelligent browser extension (Chrome & Edge) where **Astra**, an animated AI companion, explains webpages naturally — like a brilliant human teacher, mentor, or smart friend.
 
-## Quick Start
+**No backend needed. No terminal. No coding. Just download, load, and go.**
 
-### 1. Get a Free NVIDIA API Key
-1. Go to [build.nvidia.com](https://build.nvidia.com/)
-2. Sign up / log in (free)
-3. Click any model → **"Get API Key"**
-4. Copy the key (starts with `nvapi-...`)
+---
 
-### 2. Start the Backend
-```bash
-cd backend
-npm install
-cp .env.example .env
-# Paste your NVIDIA API key in .env
-npm run dev
-```
+## How to Use (3 steps)
 
-### 3. Build the Extension
-```bash
-cd extension
-npm install
-npm run build
-```
+### Step 1: Download
+- Click the green **"Code"** button above → **"Download ZIP"**
+- Unzip the folder
 
-### 4. Load in Chrome or Edge
-1. Open `chrome://extensions/` (Chrome) or `edge://extensions/` (Edge)
-2. Enable **Developer mode** (toggle in top-right)
+### Step 2: Load in Edge or Chrome
+1. Open **`edge://extensions/`** (Edge) or **`chrome://extensions/`** (Chrome)
+2. Turn on **Developer mode** (toggle in top-right corner)
 3. Click **"Load unpacked"**
-4. Select the `extension/dist/` folder
-5. Done! Click the Lumina AI icon or press `Alt+H` to open
+4. Select the **`extension/dist/`** folder from the unzipped download
+5. Done! You'll see the Lumina AI icon in your toolbar
+
+### Step 3: Add Your Free NVIDIA API Key
+1. Right-click the **Lumina AI** icon in your toolbar → **"Options"**
+2. Go to [build.nvidia.com](https://build.nvidia.com/) and sign up (free)
+3. Click any model → **"Get API Key"**
+4. Copy the key (starts with `nvapi-...`) and paste it in the settings page
+5. Click **Save** — Astra is ready!
+
+---
 
 ## Features
 
@@ -69,7 +64,7 @@ npm run build
 - Dynamic pacing: slower for complex content, faster for simple
 
 ### Smart Features
-- **RAG Architecture**: Full page understanding via DOM extraction → chunking → NVIDIA embeddings → vector retrieval
+- **RAG Architecture**: Full page understanding via DOM extraction → chunking → embeddings → vector retrieval
 - **Confusion memory**: Tracks re-read sections and adapts explanations
 - **Environmental reactions**: Adapts energy to page type (code → focused, research → intense, creative → playful)
 - **"Look Here" guidance**: Pulse highlights and glow outlines on key sections
@@ -83,33 +78,45 @@ npm run build
 
 ## Architecture
 
+Everything runs inside the extension — no external server needed.
+
 ```
-├── extension/              # Chrome/Edge Extension (Manifest V3)
-│   ├── src/
-│   │   ├── background/     # Service worker
-│   │   ├── content/        # Astra companion, viewport tracker, immersion engine
-│   │   ├── sidebar/        # React sidebar UI
-│   │   └── shared/         # Types, constants
-│   └── public/             # Manifest, icons, companion.png
-└── backend/                # Node.js + Fastify API
-    └── src/
-        ├── routes/         # /api/explain, /api/embed, /api/ocr
-        └── services/       # NVIDIA client, RAG pipeline, vector store
+extension/
+├── dist/                   # Pre-built — load this folder in your browser
+├── src/
+│   ├── background/         # Service worker
+│   ├── content/            # Astra companion, viewport tracker, immersion engine
+│   ├── sidebar/            # React sidebar UI
+│   └── shared/             # NVIDIA API, RAG pipeline, vector store, prompts
+└── public/                 # Manifest, icons, companion.png, options page
 ```
 
 ## Tech Stack
 | Layer | Technology |
 |-------|-----------|
 | Extension | React 18, TypeScript, TailwindCSS, Webpack, Manifest V3 |
-| Backend | Node.js, Fastify, TypeScript |
-| AI | NVIDIA NIM APIs (Nemotron 70B, NV-EmbedQA-E5-v5) |
-| RAG | Semantic chunking, embeddings, cosine-similarity vector store |
+| AI | NVIDIA NIM APIs (Nemotron 70B, NV-EmbedQA-E5-v5) — called directly from extension |
+| RAG | Semantic chunking, embeddings, cosine-similarity vector store (all in-browser) |
 | Voice | Browser `speechSynthesis` API (free) |
-| OCR | NVIDIA vision models |
 
 ## Browser Support
-- Google Chrome (v116+)
 - Microsoft Edge (v116+)
+- Google Chrome (v116+)
 - Any Chromium-based browser
 
-All free — no paid services required.
+**100% free — no paid services required.**
+
+---
+
+## For Developers
+
+If you want to modify the extension:
+
+```bash
+cd extension
+npm install
+npm run dev    # watch mode
+npm run build  # production build → dist/
+```
+
+The backend folder is included for optional advanced server-side RAG but is **not required** — the extension works fully standalone.
