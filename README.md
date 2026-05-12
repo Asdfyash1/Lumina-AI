@@ -119,4 +119,4 @@ npm run dev    # watch mode
 npm run build  # production build → dist/
 ```
 
-The backend folder is included for optional advanced server-side RAG but is **not required** — the extension works fully standalone.
+Everything runs inside the extension — no backend needed.
