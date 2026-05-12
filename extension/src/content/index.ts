@@ -1,3 +1,4 @@
+import './content-script.css';
 import { extractPageContent } from './dom-extractor';
 import { initSelectionDetector } from './selection-detector';
 import { showFloatingButton } from './floating-button';
