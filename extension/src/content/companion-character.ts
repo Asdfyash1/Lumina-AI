@@ -36,6 +36,7 @@ function injectStyles(): void {
   const style = document.createElement('style');
   style.id = 'heai-companion-styles';
   style.textContent = `
+    /* ========== CONTAINER ========== */
     .heai-companion-wrap {
       position: fixed;
       z-index: 2147483646;
@@ -43,7 +44,7 @@ function injectStyles(): void {
       user-select: none;
       width: ${COMPANION_SIZE}px;
       height: ${COMPANION_SIZE + 20}px;
-      transition: width 0.3s ease, height 0.3s ease;
+      transition: width 0.4s ease, height 0.4s ease;
     }
     .heai-companion-wrap:active { cursor: grabbing; }
     .heai-companion-wrap.heai-minimized {
@@ -51,6 +52,7 @@ function injectStyles(): void {
       height: ${MINIMIZED_SIZE}px;
     }
 
+    /* ========== CHARACTER BODY ========== */
     .heai-char {
       width: 100%;
       height: 100%;
@@ -60,120 +62,135 @@ function injectStyles(): void {
       background-position: center bottom;
       image-rendering: pixelated;
       position: relative;
-      filter: drop-shadow(0 4px 18px rgba(40, 80, 220, 0.45));
-      transition: transform 0.25s ease, filter 0.3s ease;
+      filter: drop-shadow(0 3px 14px rgba(40, 80, 220, 0.35));
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  filter 0.6s ease;
     }
 
-    /* IDLE — gentle float */
+    /* ---- IDLE: calm float + very subtle tilt ---- */
     .heai-emotion-idle .heai-char {
-      animation: heai-idle-bob 3s ease-in-out infinite;
+      animation: heai-idle 4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
     }
-    @keyframes heai-idle-bob {
+    @keyframes heai-idle {
       0%, 100% { transform: translateY(0) rotate(0deg); }
-      50%      { transform: translateY(-6px) rotate(0.5deg); }
+      50%      { transform: translateY(-7px) rotate(0.4deg); }
     }
 
-    /* TALKING — lively bounce + squash/stretch */
+    /* ---- TALKING: gentle rhythmic nod ---- */
     .heai-emotion-talking .heai-char {
-      animation: heai-talk-bounce 0.45s ease-in-out infinite alternate;
+      animation: heai-talk 1.8s ease-in-out infinite;
     }
-    @keyframes heai-talk-bounce {
-      0%   { transform: translateY(0) scaleY(1) scaleX(1); }
-      50%  { transform: translateY(-4px) scaleY(1.03) scaleX(0.97); }
-      100% { transform: translateY(-8px) scaleY(0.97) scaleX(1.02); }
+    @keyframes heai-talk {
+      0%, 100% { transform: translateY(0) scaleY(1); }
+      25%      { transform: translateY(-4px) scaleY(1.012); }
+      50%      { transform: translateY(-1px) scaleY(0.993); }
+      75%      { transform: translateY(-5px) scaleY(1.008); }
     }
 
-    /* THINKING — tilt + slow float */
+    /* ---- THINKING: slow thoughtful tilt ---- */
     .heai-emotion-thinking .heai-char {
-      animation: heai-think-sway 2.5s ease-in-out infinite;
+      animation: heai-think 4s ease-in-out infinite;
     }
-    @keyframes heai-think-sway {
-      0%, 100% { transform: translateY(0) rotate(-3deg); }
-      50%      { transform: translateY(-5px) rotate(3deg); }
-    }
-
-    /* HAPPY — excited bounce + rotation */
-    .heai-emotion-happy .heai-char {
-      animation: heai-happy-jump 0.5s ease-in-out infinite;
-    }
-    @keyframes heai-happy-jump {
-      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-      30%      { transform: translateY(-14px) rotate(-4deg) scale(1.05); }
-      60%      { transform: translateY(-3px) rotate(3deg) scale(0.98); }
-    }
-
-    /* CONFUSED — wobble */
-    .heai-emotion-confused .heai-char {
-      animation: heai-confused-wobble 1.2s ease-in-out infinite;
-    }
-    @keyframes heai-confused-wobble {
+    @keyframes heai-think {
       0%, 100% { transform: translateY(0) rotate(0deg); }
-      25%      { transform: translateY(-3px) rotate(-5deg); }
-      50%      { transform: translateY(0) rotate(0deg); }
-      75%      { transform: translateY(-3px) rotate(5deg); }
+      30%      { transform: translateY(-4px) rotate(-2.5deg); }
+      70%      { transform: translateY(-6px) rotate(1.5deg); }
     }
 
-    /* SERIOUS — subtle breathing */
+    /* ---- HAPPY: soft lift + micro scale ---- */
+    .heai-emotion-happy .heai-char {
+      animation: heai-happy 3s ease-in-out infinite;
+    }
+    @keyframes heai-happy {
+      0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+      40%      { transform: translateY(-9px) scale(1.02) rotate(0.5deg); }
+      60%      { transform: translateY(-6px) scale(1.01) rotate(-0.3deg); }
+    }
+
+    /* ---- CONFUSED: gentle sway ---- */
+    .heai-emotion-confused .heai-char {
+      animation: heai-confused 3.5s ease-in-out infinite;
+    }
+    @keyframes heai-confused {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25%      { transform: translateY(-3px) rotate(-2deg); }
+      75%      { transform: translateY(-3px) rotate(2deg); }
+    }
+
+    /* ---- SERIOUS: very subtle breathe ---- */
     .heai-emotion-serious .heai-char {
-      animation: heai-serious-breathe 4s ease-in-out infinite;
+      animation: heai-serious 5s ease-in-out infinite;
     }
-    @keyframes heai-serious-breathe {
-      0%, 100% { transform: scale(1); }
-      50%      { transform: scale(1.015); }
+    @keyframes heai-serious {
+      0%, 100% { transform: scale(1) translateY(0); }
+      50%      { transform: scale(1.008) translateY(-2px); }
     }
 
-    /* POINTING — lean + hand indicator */
+    /* ---- POINTING: slight lean ---- */
     .heai-emotion-pointing .heai-char {
-      animation: heai-point-lean 1.5s ease-in-out infinite;
+      animation: heai-point 3s ease-in-out infinite;
     }
-    @keyframes heai-point-lean {
+    @keyframes heai-point {
       0%, 100% { transform: translateX(0) rotate(0deg); }
-      50%      { transform: translateX(-8px) rotate(-6deg); }
+      50%      { transform: translateX(-5px) rotate(-3deg); }
     }
 
-    /* GLOW AURA per emotion */
+    /* ========== HOLOGRAM AURA ========== */
     .heai-aura {
       position: absolute;
-      inset: -18px;
+      inset: -16px;
       border-radius: 50%;
       pointer-events: none;
-      opacity: 0.5;
-      transition: box-shadow 0.5s ease, opacity 0.5s ease;
+      opacity: 0;
+      transition: box-shadow 0.8s ease, opacity 0.8s ease;
     }
     .heai-emotion-idle .heai-aura {
-      box-shadow: 0 0 30px 8px rgba(54, 166, 255, 0.20);
-      animation: heai-glow-pulse 3s ease-in-out infinite;
+      box-shadow: 0 0 24px 6px rgba(54, 166, 255, 0.12);
+      animation: heai-aura-breathe 5s ease-in-out infinite;
     }
     .heai-emotion-talking .heai-aura {
-      box-shadow: 0 0 35px 12px rgba(54, 166, 255, 0.35);
-      animation: heai-glow-pulse 1s ease-in-out infinite;
+      box-shadow: 0 0 28px 8px rgba(54, 166, 255, 0.18);
+      animation: heai-aura-breathe 2.5s ease-in-out infinite;
     }
     .heai-emotion-thinking .heai-aura {
-      box-shadow: 0 0 28px 10px rgba(180, 140, 255, 0.30);
-      animation: heai-glow-pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 24px 7px rgba(160, 130, 255, 0.15);
+      animation: heai-aura-breathe 4s ease-in-out infinite;
     }
     .heai-emotion-happy .heai-aura {
-      box-shadow: 0 0 40px 14px rgba(255, 200, 60, 0.30);
-      animation: heai-glow-pulse 0.6s ease-in-out infinite;
+      box-shadow: 0 0 28px 8px rgba(255, 210, 80, 0.15);
+      animation: heai-aura-breathe 3s ease-in-out infinite;
     }
     .heai-emotion-confused .heai-aura {
-      box-shadow: 0 0 25px 8px rgba(255, 160, 60, 0.25);
-      animation: heai-glow-pulse 1.2s ease-in-out infinite;
+      box-shadow: 0 0 22px 6px rgba(255, 170, 80, 0.12);
+      animation: heai-aura-breathe 3.5s ease-in-out infinite;
     }
     .heai-emotion-serious .heai-aura {
-      box-shadow: 0 0 22px 6px rgba(100, 120, 220, 0.25);
-      animation: heai-glow-pulse 4s ease-in-out infinite;
+      box-shadow: 0 0 20px 5px rgba(90, 110, 200, 0.12);
+      animation: heai-aura-breathe 5s ease-in-out infinite;
     }
     .heai-emotion-pointing .heai-aura {
-      box-shadow: 0 0 32px 10px rgba(54, 220, 166, 0.25);
-      animation: heai-glow-pulse 1.5s ease-in-out infinite;
+      box-shadow: 0 0 24px 6px rgba(54, 200, 160, 0.14);
+      animation: heai-aura-breathe 3s ease-in-out infinite;
     }
-    @keyframes heai-glow-pulse {
-      0%, 100% { opacity: 0.4; }
-      50%      { opacity: 0.8; }
+    @keyframes heai-aura-breathe {
+      0%, 100% { opacity: 0.3; }
+      50%      { opacity: 0.65; }
     }
 
-    /* EFFECTS LAYER */
+    /* ========== HOLOGRAM FLICKER (idle only) ========== */
+    .heai-emotion-idle .heai-char {
+      animation: heai-idle 4s cubic-bezier(0.45,0.05,0.55,0.95) infinite,
+                 heai-holo-flicker 8s ease-in-out infinite;
+    }
+    @keyframes heai-holo-flicker {
+      0%, 94%, 100% { opacity: 1; filter: drop-shadow(0 3px 14px rgba(40, 80, 220, 0.35)); }
+      95%           { opacity: 0.92; filter: drop-shadow(0 3px 14px rgba(40, 80, 220, 0.5)); }
+      96%           { opacity: 1; filter: drop-shadow(0 3px 14px rgba(40, 80, 220, 0.35)); }
+      97%           { opacity: 0.94; filter: drop-shadow(0 3px 18px rgba(80, 120, 255, 0.45)); }
+      98%           { opacity: 1; filter: drop-shadow(0 3px 14px rgba(40, 80, 220, 0.35)); }
+    }
+
+    /* ========== EFFECTS LAYER ========== */
     .heai-fx {
       position: absolute;
       inset: 0;
@@ -181,96 +198,115 @@ function injectStyles(): void {
       overflow: visible;
     }
 
+    /* Thinking dots — soft floating */
     .heai-think-dots {
       position: absolute;
-      top: -4px; right: -10px;
+      top: -6px; right: -12px;
       display: none;
     }
-    .heai-emotion-thinking .heai-think-dots { display: flex; gap: 4px; align-items: flex-end; }
+    .heai-emotion-thinking .heai-think-dots { display: flex; gap: 3px; align-items: flex-end; }
     .heai-think-dot {
-      width: 8px; height: 8px;
+      width: 6px; height: 6px;
       border-radius: 50%;
-      background: rgba(180, 140, 255, 0.8);
-      animation: heai-dot-bob 1.4s ease-in-out infinite;
+      background: rgba(160, 130, 255, 0.6);
+      animation: heai-dot-float 2.4s ease-in-out infinite;
     }
-    .heai-think-dot:nth-child(2) { width: 10px; height: 10px; animation-delay: 0.18s; }
-    .heai-think-dot:nth-child(3) { width: 13px; height: 13px; animation-delay: 0.36s; }
-    @keyframes heai-dot-bob {
-      0%, 100% { transform: translateY(0); opacity: 0.5; }
-      50%      { transform: translateY(-8px); opacity: 1; }
+    .heai-think-dot:nth-child(2) { width: 8px; height: 8px; animation-delay: 0.3s; }
+    .heai-think-dot:nth-child(3) { width: 10px; height: 10px; animation-delay: 0.6s; }
+    @keyframes heai-dot-float {
+      0%, 100% { transform: translateY(0); opacity: 0.3; }
+      50%      { transform: translateY(-8px); opacity: 0.8; }
     }
 
+    /* Happy — faint sparkles, not hearts */
     .heai-sparkles { position: absolute; inset: -20px; display: none; }
     .heai-emotion-happy .heai-sparkles { display: block; }
     .heai-sparkle {
       position: absolute;
-      width: 6px; height: 6px;
-      background: #ffd700;
-      border-radius: 1px;
-      transform: rotate(45deg);
-      animation: heai-sparkle-pop 0.8s ease-out infinite;
+      width: 4px; height: 4px;
+      background: rgba(255, 215, 120, 0.7);
+      border-radius: 50%;
+      animation: heai-sparkle-fade 2.5s ease-out infinite;
     }
-    .heai-sparkle:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
-    .heai-sparkle:nth-child(2) { top: 5%; right: 10%; animation-delay: 0.2s; }
-    .heai-sparkle:nth-child(3) { bottom: 30%; left: 0; animation-delay: 0.4s; }
-    .heai-sparkle:nth-child(4) { top: 20%; right: 0; animation-delay: 0.15s; }
-    .heai-sparkle:nth-child(5) { bottom: 40%; right: 5%; animation-delay: 0.35s; }
-    @keyframes heai-sparkle-pop {
-      0%   { transform: rotate(45deg) scale(0); opacity: 1; }
-      60%  { transform: rotate(45deg) scale(1.2); opacity: 0.8; }
-      100% { transform: rotate(45deg) scale(0.5); opacity: 0; }
+    .heai-sparkle:nth-child(1) { top: 8%; left: 5%; animation-delay: 0s; }
+    .heai-sparkle:nth-child(2) { top: 3%; right: 10%; animation-delay: 0.8s; }
+    .heai-sparkle:nth-child(3) { bottom: 28%; left: 0; animation-delay: 1.6s; }
+    .heai-sparkle:nth-child(4) { top: 18%; right: 0; animation-delay: 0.4s; }
+    .heai-sparkle:nth-child(5) { bottom: 38%; right: 5%; animation-delay: 1.2s; }
+    @keyframes heai-sparkle-fade {
+      0%   { transform: scale(0); opacity: 0; }
+      30%  { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(0.5); opacity: 0; }
     }
 
+    /* Confused — subtle floating ? */
     .heai-question {
       position: absolute;
-      top: -16px; right: -6px;
-      font-size: 22px; font-weight: 800;
-      color: #ff9040;
+      top: -14px; right: -6px;
+      font-size: 18px; font-weight: 700;
+      color: rgba(255, 170, 80, 0.65);
       display: none;
       font-family: sans-serif;
-      animation: heai-q-float 1.2s ease-in-out infinite;
+      animation: heai-q-drift 3s ease-in-out infinite;
     }
     .heai-emotion-confused .heai-question { display: block; }
-    @keyframes heai-q-float {
-      0%, 100% { transform: translateY(0) rotate(-5deg); opacity: 0.8; }
-      50%      { transform: translateY(-6px) rotate(5deg); opacity: 1; }
+    @keyframes heai-q-drift {
+      0%, 100% { transform: translateY(0) rotate(-3deg); opacity: 0.4; }
+      50%      { transform: translateY(-6px) rotate(3deg); opacity: 0.75; }
     }
 
+    /* Serious — faint indicator */
+    .heai-exclaim {
+      position: absolute;
+      top: -14px; right: -6px;
+      font-size: 16px; font-weight: 700;
+      color: rgba(200, 80, 80, 0.5);
+      display: none;
+      font-family: sans-serif;
+      animation: heai-exclaim-pulse 4s ease-in-out infinite;
+    }
+    .heai-emotion-serious .heai-exclaim { display: block; }
+    @keyframes heai-exclaim-pulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50%      { opacity: 0.6; transform: scale(1.05); }
+    }
+
+    /* Pointing — soft arrow indicator */
     .heai-ptr-arrow {
       position: absolute;
-      bottom: 30%; left: -24px;
+      bottom: 30%; left: -22px;
       display: none;
-      animation: heai-ptr-bounce 1s ease-in-out infinite;
+      animation: heai-ptr-drift 2.5s ease-in-out infinite;
     }
     .heai-emotion-pointing .heai-ptr-arrow { display: block; }
-    @keyframes heai-ptr-bounce {
-      0%, 100% { transform: translateX(0); }
-      50%      { transform: translateX(-8px); }
+    @keyframes heai-ptr-drift {
+      0%, 100% { transform: translateX(0); opacity: 0.5; }
+      50%      { transform: translateX(-6px); opacity: 0.8; }
     }
 
-    /* SPEECH BUBBLE */
+    /* ========== SPEECH BUBBLE ========== */
     .heai-speech {
       position: absolute;
-      bottom: calc(100% + 10px);
+      bottom: calc(100% + 12px);
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(26, 27, 46, 0.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: #e8eaff;
-      padding: 8px 14px;
+      background: rgba(20, 22, 40, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      color: #dde0ff;
+      padding: 9px 15px;
       border-radius: 14px;
       font-size: 12px;
       font-weight: 500;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      max-width: 220px;
+      max-width: 230px;
       text-align: center;
       white-space: nowrap;
       pointer-events: none;
-      border: 1px solid rgba(54, 166, 255, 0.25);
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3), 0 0 10px rgba(54, 166, 255, 0.15);
+      border: 1px solid rgba(54, 146, 255, 0.18);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 8px rgba(54, 146, 255, 0.08);
       opacity: 0;
-      transition: opacity 0.25s ease, transform 0.25s ease;
+      transition: opacity 0.35s ease, transform 0.35s ease;
     }
     .heai-speech::after {
       content: '';
@@ -278,42 +314,43 @@ function injectStyles(): void {
       top: 100%; left: 50%;
       transform: translateX(-50%);
       border: 6px solid transparent;
-      border-top-color: rgba(26, 27, 46, 0.92);
+      border-top-color: rgba(20, 22, 40, 0.92);
     }
     .heai-speech.heai-visible {
       opacity: 1;
-      transform: translateX(-50%) translateY(-4px);
+      transform: translateX(-50%) translateY(-3px);
     }
 
-    /* CONTROLS */
+    /* ========== CONTROLS ========== */
     .heai-ctrls {
       position: absolute;
       top: -6px; right: -6px;
       display: flex; gap: 3px;
       opacity: 0;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.25s ease;
     }
     .heai-companion-wrap:hover .heai-ctrls { opacity: 1; }
     .heai-ctrl-btn {
       width: 20px; height: 20px;
       border-radius: 50%;
-      border: 1px solid rgba(54, 166, 255, 0.3);
+      border: 1px solid rgba(54, 146, 255, 0.2);
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       font-size: 11px; font-weight: 700;
-      background: rgba(26, 27, 46, 0.85);
-      color: #b0b8ff;
+      background: rgba(20, 22, 40, 0.85);
+      color: #9aa0d0;
       backdrop-filter: blur(4px);
       transition: transform 0.15s ease, background 0.15s ease;
       line-height: 1;
     }
     .heai-ctrl-btn:hover {
-      transform: scale(1.15);
-      background: rgba(54, 166, 255, 0.4);
-      color: white;
+      transform: scale(1.1);
+      background: rgba(54, 146, 255, 0.3);
+      color: #e0e4ff;
     }
 
-    .heai-minimized .heai-char { filter: drop-shadow(0 2px 8px rgba(40, 80, 220, 0.3)); }
+    /* ========== MINIMIZED STATE ========== */
+    .heai-minimized .heai-char { filter: drop-shadow(0 2px 8px rgba(40, 80, 220, 0.25)); }
     .heai-minimized .heai-fx,
     .heai-minimized .heai-aura,
     .heai-minimized .heai-speech { display: none; }
@@ -351,9 +388,10 @@ export function initCompanion(): void {
       <div class="heai-sparkle"></div>
     </div>
     <div class="heai-question">?</div>
+    <div class="heai-exclaim">!</div>
     <div class="heai-ptr-arrow">
       <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
-        <path d="M18 8H2M2 8L8 2M2 8L8 14" stroke="#36dca6" stroke-width="2.5"
+        <path d="M18 8H2M2 8L8 2M2 8L8 14" stroke="rgba(54,200,160,0.6)" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
@@ -388,6 +426,8 @@ export function initCompanion(): void {
 
   setupDrag(container);
   document.body.appendChild(container);
+
+  showTooltip('Hi! I\'m Astra', 3000);
 }
 
 function setupDrag(el: HTMLDivElement): void {
