@@ -1,7 +1,5 @@
 node_modules/
-backend/dist/
 .env
-!.env.example
 *.log
 
 # Keep extension/dist/ in repo so users can just download and load
