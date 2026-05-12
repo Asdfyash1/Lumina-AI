@@ -1,0 +1,67 @@
+{
+  "manifest_version": 3,
+  "name": "Lumina AI",
+  "version": "1.0.0",
+  "description": "Astra, your intelligent AI companion, explains webpages naturally like a human teacher, mentor, or smart friend.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-script.js"],
+      "css": ["content-script.css"]
+    }
+  ],
+  "side_panel": {
+    "default_path": "sidebar.html"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    },
+    "default_title": "Lumina AI — Astra"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "commands": {
+    "toggle-sidebar": {
+      "suggested_key": {
+        "default": "Alt+H"
+      },
+      "description": "Toggle sidebar"
+    },
+    "explain-selection": {
+      "suggested_key": {
+        "default": "Alt+E"
+      },
+      "description": "Explain selected text"
+    },
+    "voice-toggle": {
+      "suggested_key": {
+        "default": "Alt+V"
+      },
+      "description": "Toggle voice playback"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["sidebar.html", "sidebar.js", "sidebar.css", "icons/companion.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
